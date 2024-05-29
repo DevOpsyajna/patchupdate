@@ -1,20 +1,14 @@
 ---
-- name: Uninstall VLC Media Player and Visual Studio Code
+- name: Perform Windows Update Patch Management
   hosts: 172.16.0.67
   tasks:
-  
-    - name: Uninstall Visual Studio Code using Chocolatey
-      win_chocolatey:
-        name: vscode
-        state: absent
-
-    - name: Ensure Visual Studio Code is uninstalled using PowerShell
-      win_shell: |
-        $vscode = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*Microsoft Visual Studio Code*" }
-        if ($vscode) {
-            $vscode.Uninstall() | Out-Null
-        } else {
-            Write-Output "Visual Studio Code is not installed."
-      args:
-        executable: powershell.exe
-
+    - name: Check for available updates
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - UpdateRollups
+          - FeaturePacks
+          - ServicePacks
+        state: list
+      register: updates_list
