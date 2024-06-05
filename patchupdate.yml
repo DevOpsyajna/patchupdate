@@ -11,6 +11,4 @@
           - FeaturePacks
           - ServicePacks
         state: searched
-        reboot: yes
-        reboot_timeout: 3600
       register: updates_list
